@@ -1,0 +1,48 @@
+# Virtual environment
+venv/
+.env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+
+# Model files
+*.h5
+*.keras
+*.ckpt
+*.pb
+
+# Saved models
+model/saved/
+outputs/
+
+# Dataset
+data/raw/
+data/labeled/
+data/processed/
+
+# Logs
+*.log
+logs/
+outputs/logs/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp

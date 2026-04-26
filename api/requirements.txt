@@ -1,0 +1,14 @@
+tensorflow>=2.13
+keras
+numpy
+pillow
+opencv-python-headless
+fastapi
+uvicorn[standard]
+python-multipart
+datasets
+huggingface_hub
+scikit-learn
+matplotlib
+requests
+python-dotenv
