@@ -1,8 +1,6 @@
-# Anime Character Recognition System 🎌
+# Anime Character Recognition System
 
 A mini machine learning web application that predicts anime characters from uploaded images using deep learning.
-
-This project is built using **TensorFlow, FastAPI, HTML, CSS, and JavaScript**.
 
 ---
 
@@ -25,6 +23,7 @@ Currently, the model is trained on selected anime characters using a subset of i
 - Image preview before prediction
 - FastAPI backend integration
 - Trained using TensorFlow and MobileNetV2
+
 ---
 
 ## 🎯 Characters Supported
@@ -143,15 +142,22 @@ The model is built using **MobileNetV2 transfer learning**.
 
 ## 📊 Current Performance
 
-> Note: Due to limited dataset size, predictions may sometimes vary for unseen images.
-
+- Model works well on trained dataset with moderate-to-good accuracy
+- Performs better on clear, front-facing anime character images
+- Accuracy drops for unseen characters or different art styles
+- Faster inference on CPU for small batch image inputs
+- Limited real-time testing implemented (image-based only for now)
+- Performance depends heavily on dataset quality and size
 ---
 
 ## 🔮 Future Improvements
 
-- Increase dataset size
-- Improve prediction accuracy
-- More anime characters
-- Better UI styling
-
+- Increase dataset size for better accuracy and generalization
+- Try advanced models like EfficientNet or Vision Transformers
+- Enable real-time detection using webcam or video input
+- Deploy as a web app using Flask or FastAPI
+- Optimize model for faster performance
+- Add confidence score filtering for predictions
+- Expand support for more anime characters and styles
+- Show character details after prediction (name, anime info)
 ---
