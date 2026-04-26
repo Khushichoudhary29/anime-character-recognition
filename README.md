@@ -19,12 +19,12 @@ Currently, the model is trained on selected anime characters using a subset of i
 ## ✨ Features
 
 - Upload anime character image
-- Predict character name
+- Predict top 3 matching characters
 - Show confidence percentage
 - User-friendly web interface
+- Image preview before prediction
 - FastAPI backend integration
-- Deep learning model using MobileNetV2
-
+- Trained using TensorFlow and MobileNetV2
 ---
 
 ## 🎯 Characters Supported
@@ -150,8 +150,8 @@ The model is built using **MobileNetV2 transfer learning**.
 ## 🔮 Future Improvements
 
 - Increase dataset size
-- Better prediction accuracy
+- Improve prediction accuracy
 - More anime characters
-- Better UI design
+- Better UI styling
 
 ---
