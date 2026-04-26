@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anime Character Recognition</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+    h1 { margin-bottom: 8px; }
+    p { color: #cbd5e1; }
+    input, button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      margin-top: 20px;
+      border-radius: 12px;
+      display: none;
+      background: #0f172a;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #334155;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Anime Character Recognition</h1>
+    <p>Upload an anime image and predict the character</p>
+
+    <input type="file" id="imageInput" accept="image/*" />
+    <button onclick="predictImage()">Predict Character</button>
+
+    <img id="preview" alt="Preview" />
+
+    <div class="result" id="resultBox">
+      <h3 id="character"></h3>
+      <p id="confidence"></p>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+      }
+    });
+
+    async function predictImage() {
+      const file = input.files[0];
+      if (!file) {
+        alert('Please select an image first');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        document.getElementById('resultBox').style.display = 'block';
+        document.getElementById('character').innerText = `Prediction: ${data.predicted_character}`;
+        document.getElementById('confidence').innerText = `Confidence: ${data.confidence}%`;
+      } catch (error) {
+        alert('API connection error');
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
