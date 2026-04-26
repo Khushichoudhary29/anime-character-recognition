@@ -32,12 +32,18 @@ async def predict(file: UploadFile = File(...)):
     img_array = np.array(image, dtype=np.float32) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
 
-    prediction = model.predict(img_array)
+    predictions = model.predict(img_array)[0]
 
-    pred_index = int(np.argmax(prediction))
-    confidence = float(np.max(prediction) * 100)
+    top_indices = np.argsort(predictions)[-3:][::-1]
 
-    return JSONResponse({
-        "predicted_character": class_names[pred_index],
-        "confidence": round(confidence, 2)
-    })
+    top_predictions = []
+
+    for idx in top_indices:
+        top_predictions.append({
+            "character": class_names[idx],
+            "confidence": round(float(predictions[idx] * 100), 2)
+        })
+
+    return {
+        "top_predictions": top_predictions
+    }
