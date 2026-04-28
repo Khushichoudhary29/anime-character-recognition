@@ -1,43 +1,29 @@
-# Anime Character Recognition System
+# 🎭 Anime Character Recognition System
 
-A mini machine learning web application that predicts anime characters from uploaded images using deep learning.
-
+A machine learning based mini web application that predicts anime characters.
 ---
 
 ## 📌 Project Overview
 
 The aim of this project is to recognize anime characters from an uploaded image.
 
-The user uploads an image through the web interface, and the system predicts the character name along with the confidence score.
-
-Currently, the model is trained on selected anime characters using a subset of images.
+The user uploads an anime image through the web interface, and the system predicts the **top 3 most likely character matches** along with their confidence percentages.
 
 ---
 
 ## ✨ Features
 
 - Upload anime character image
+- Drag and drop image upload
+- Image preview before prediction
 - Predict top 3 matching characters
 - Show confidence percentage
-- User-friendly web interface
-- Image preview before prediction
+- Confidence progress bars
+- Best match insight card
+- Recent prediction history panel
+- User-friendly professional dashboard UI
 - FastAPI backend integration
-- Trained using TensorFlow and MobileNetV2
-
----
-
-## 🎯 Characters Supported
-
-The model currently supports prediction for the following characters:
-
-- Naruto Uzumaki
-- Sasuke Uchiha
-- Sakura Haruno
-- Kakashi Hatake
-- Monkey D. Luffy
-- Goku
-- Saitama
-- Hinata Hyuga
+- TensorFlow MobileNetV2 model
 
 ---
 
@@ -90,11 +76,13 @@ anime-character-recognition/
 
 ## 🚀 How to Run the Project
 
-### Step 1: Open the folder
+### Step 1: Open the project folder
 
 ```bash
 cd anime-character-recognition
 ```
+
+---
 
 ### Step 2: Create virtual environment
 
@@ -102,27 +90,35 @@ cd anime-character-recognition
 python -m venv venv
 ```
 
-Activate environment:
+---
 
-### Windows
+### Step 3: Activate virtual environment
+
+#### Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-### Step 3: Install dependencies
+---
+
+### Step 4: Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 4: Run the application
+---
+
+### Step 5: Run the application
 
 ```bash
 uvicorn api.main:app --reload
 ```
 
-### Step 5: Open in browser
+---
+
+### Step 6: Open in browser
 
 ```text
 http://127.0.0.1:8000
@@ -134,30 +130,82 @@ http://127.0.0.1:8000
 
 The model is built using **MobileNetV2 transfer learning**.
 
+### Model Details
+
 - Pretrained on ImageNet
-- Fine-tuned for anime face classification
-- Softmax output layer for multi-class prediction
+- Transfer learning based classification
+- Softmax output layer
+- Multi-class prediction
+- Top 3 ranked outputs
+
+### Input Processing
+
+- image resize: 128 × 128
+- RGB conversion
+- normalization
+- batch dimension expansion
+
+---
+
+## ⚙️ Working Process
+
+The application works in the following steps:
+
+```text
+Upload Image
+   ↓
+Image Preprocessing
+   ↓
+Model Prediction
+   ↓
+Top 3 Confidence Ranking
+   ↓
+Frontend Dashboard Display
+```
 
 ---
 
 ## 📊 Current Performance
 
-- Model works well on trained dataset with moderate-to-good accuracy
-- Performs better on clear, front-facing anime character images
-- Accuracy drops for unseen characters or different art styles
-- Faster inference on CPU for small batch image inputs
-- Limited real-time testing implemented (image-based only for now)
-- Performance depends heavily on dataset quality and size
+- Good performance on trained dataset
+- Better results for clear front-facing anime faces
+- Top 3 ranking improves usability
+- Fast prediction on CPU
+- Suitable for mini project demonstration
+- Accuracy depends on dataset size and image quality
+
+---
+
+## 🖥️ Current UI Enhancements
+
+The current interface includes:
+
+- modern dashboard layout
+- preview panel
+- prediction result panel
+- confidence bars
+- insight card
+- recent history section
+- drag-and-drop upload
+
+These upgrades make the project presentation-ready.
+
 ---
 
 ## 🔮 Future Improvements
 
-- Increase dataset size for better accuracy and generalization
-- Try advanced models like EfficientNet or Vision Transformers
-- Enable real-time detection using webcam or video input
-- Deploy as a web app using Flask or FastAPI
-- Optimize model for faster performance
-- Add confidence score filtering for predictions
-- Expand support for more anime characters and styles
-- Show character details after prediction (name, anime info)
+- increase dataset size
+- support more anime characters
+- improve model accuracy
+- use EfficientNet / Vision Transformer
+- real-time webcam prediction
+- character information card
+- API-based anime details
+- deployment on Render / Railway
+- mobile responsive UI
+
 ---
+
+## 🎓 Conclusion
+
+This project demonstrates the practical use of **machine learning, transfer learning, and web application integration** for anime character recognition.
