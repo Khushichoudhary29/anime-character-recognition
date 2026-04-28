@@ -112,6 +112,51 @@
 
         .loading {
             color: #93c5fd;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 35px;
+            height: 35px;
+            border: 4px solid #334155;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .confidence-label {
+            font-size: 14px;
+            color: #cbd5e1;
+            margin-top: 6px;
+        }
+
+        .history-panel {
+            margin-top: 30px;
+            background: #334155;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .history-panel h2 {
+            margin-top: 0;
+        }
+
+        .history-item {
+            padding: 12px;
+            margin-top: 10px;
+            background: #475569;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .history-empty {
+            color: #cbd5e1;
         }
     </style>
 </head>
@@ -135,12 +180,20 @@
             <div id="resultBox">Upload image and click predict</div>
         </div>
     </div>
+
+    <div class="history-panel">
+        <h2>Recent Predictions</h2>
+        <div id="historyBox" class="history-empty">No predictions yet</div>
+    </div>
 </div>
 
 <script>
     const imageInput = document.getElementById("imageInput");
     const preview = document.getElementById("preview");
     const resultBox = document.getElementById("resultBox");
+    const historyBox = document.getElementById("historyBox");
+
+    let predictionHistory = [];
 
     imageInput.addEventListener("change", function () {
         const file = this.files[0];
@@ -150,6 +203,27 @@
             preview.style.display = "block";
         }
     });
+
+    function getConfidenceLabel(value) {
+        if (value >= 80) return "Very High";
+        if (value >= 60) return "High";
+        if (value >= 40) return "Medium";
+        return "Low";
+    }
+
+    function updateHistory() {
+        if (predictionHistory.length === 0) {
+            historyBox.innerHTML = "No predictions yet";
+            return;
+        }
+
+        historyBox.innerHTML = predictionHistory.map(item => `
+            <div class="history-item">
+                <strong>${item.character}</strong> - ${item.confidence}%<br>
+                <small>${item.time}</small>
+            </div>
+        `).join("");
+    }
 
     async function predictCharacter() {
         const file = imageInput.files[0];
@@ -162,7 +236,10 @@
         const formData = new FormData();
         formData.append("file", file);
 
-        resultBox.innerHTML = '<p class="loading">Predicting...</p>';
+        resultBox.innerHTML = `
+            <div class="spinner"></div>
+            <p class="loading">Analyzing image...</p>
+        `;
 
         try {
             const response = await fetch("/predict", {
@@ -175,10 +252,15 @@
             let html = "";
 
             data.top_predictions.forEach((pred, index) => {
+                const label = getConfidenceLabel(pred.confidence);
+
                 html += `
                     <div class="prediction-card">
                         <strong>#${index + 1} ${pred.character}</strong>
                         <p>Confidence: ${pred.confidence}%</p>
+                        <div class="confidence-label">
+                            Prediction Strength: ${label}
+                        </div>
                         <div class="bar-container">
                             <div class="bar" style="width:${pred.confidence}%"></div>
                         </div>
@@ -187,6 +269,20 @@
             });
 
             resultBox.innerHTML = html;
+
+            const topResult = data.top_predictions[0];
+
+            predictionHistory.unshift({
+                character: topResult.character,
+                confidence: topResult.confidence,
+                time: new Date().toLocaleTimeString()
+            });
+
+            if (predictionHistory.length > 5) {
+                predictionHistory.pop();
+            }
+
+            updateHistory();
 
         } catch (error) {
             console.error(error);
