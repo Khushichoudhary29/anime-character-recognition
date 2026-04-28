@@ -1,14 +1,19 @@
 import kagglehub
 import os
 import shutil
+import random
 
-# Setup cache on D drive
+# ===============================
+# CONFIGURATION
+# ===============================
 os.environ["KAGGLEHUB_CACHE"] = "D:/kaggle_cache"
 
-print("Accessing dataset...")
-path = kagglehub.dataset_download("anuragraj03/anime-face-dataset")
+TARGET_BASE = "data/raw"
+IMAGES_PER_CHARACTER = 100  
+CLEAR_OLD_DATA = True        
 
-characters = [
+# Add more characters here
+CHARACTERS = [
     "Naruto Uzumaki",
     "Sasuke Uchiha",
     "Sakura Haruno",
@@ -16,39 +21,66 @@ characters = [
     "Monkey D. Luffy",
     "Goku",
     "Saitama",
-    "Hinata Hyuga"
+    "Hinata Hyuga",
+
+    # NEW CHARACTERS
+    "Itachi Uchiha",
+    "Gaara",
+    "Vegeta",
+    "Ichigo Kurosaki",
+    "Levi Ackerman",
+    "Mikasa Ackerman",
+    "Eren Yeager",
+    "Tanjiro Kamado",
+    "Nezuko Kamado",
+    "Gojo Satoru",
+    "Yuji Itadori"
 ]
 
-target_base = "data/raw"
-num_images = 50
+# ===============================
+# DOWNLOAD DATASET
+# ===============================
+print("Accessing Kaggle dataset...")
+dataset_path = kagglehub.dataset_download(
+    "anuragraj03/anime-face-dataset"
+)
 
-for char in characters:
-    source_dir = os.path.join(path, char)
-    dest_dir = os.path.join(target_base, char)
+print(f"Dataset path: {dataset_path}")
 
-    if os.path.exists(source_dir):
-        # Create fresh folder
-        if os.path.exists(dest_dir):
-            shutil.rmtree(dest_dir)
+os.makedirs(TARGET_BASE, exist_ok=True)
 
-        os.makedirs(dest_dir, exist_ok=True)
+# ===============================
+# COPY IMAGES
+# ===============================
+for character in CHARACTERS:
+    source_dir = os.path.join(dataset_path, character)
+    target_dir = os.path.join(TARGET_BASE, character)
 
-        files = [
-            f for f in os.listdir(source_dir)
-            if f.lower().endswith((".jpg", ".jpeg", ".png"))
-        ]
+    if not os.path.exists(source_dir):
+        print(f"❌ Character folder not found: {character}")
+        continue
 
-        subset = files[:num_images]
+    if CLEAR_OLD_DATA and os.path.exists(target_dir):
+        shutil.rmtree(target_dir)
 
-        for file_name in subset:
-            shutil.copy(
-                os.path.join(source_dir, file_name),
-                os.path.join(dest_dir, file_name)
-            )
+    os.makedirs(target_dir, exist_ok=True)
 
-        print(f"✅ Copied {len(subset)} images for {char}")
+    image_files = [
+        file_name for file_name in os.listdir(source_dir)
+        if file_name.lower().endswith((".jpg", ".jpeg", ".png"))
+    ]
 
-    else:
-        print(f"❌ Folder '{char}' not found")
+    random.shuffle(image_files)
 
-print(f"\nDataset ready at: {os.path.abspath(target_base)}")
+    selected_images = image_files[:IMAGES_PER_CHARACTER]
+
+    for file_name in selected_images:
+        shutil.copy(
+            os.path.join(source_dir, file_name),
+            os.path.join(target_dir, file_name)
+        )
+
+    print(f"✅ {character}: {len(selected_images)} images copied")
+
+print("\nDataset preparation completed successfully.")
+print(f"Saved at: {os.path.abspath(TARGET_BASE)}")
